@@ -14,6 +14,6 @@ channel_username = 'deergifs'
 channel_entity = client.get_entity(channel_username)
 for message in client.iter_messages(channel_entity):
     print("Downloading message: {}".format(message))
-    file_ext = message.file.name.split(".")[-1]
+    file_ext = message.file.mime_type.split("/")[-1]
     path = f"{directory}/{message.id}.{file_ext}"
     client.download_media(message=message, file=path)
