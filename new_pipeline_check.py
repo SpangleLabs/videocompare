@@ -124,7 +124,6 @@ for image_directory in glob.glob(f"{dir_buffer_images}/*/"):
     duplicate_counts = {}
     for image_hash in video_hashes:
         if image_hash in store['hashes']:
-            print("Duplicate?")
             if store['hashes'][image_hash] not in duplicate_counts:
                 duplicate_counts[store['hashes'][image_hash]] = 0
             duplicate_counts[store['hashes'][image_hash]] += 1
