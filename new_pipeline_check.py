@@ -8,6 +8,7 @@ import imagehash
 
 config = {
     "gif_channel": "deergifs",
+    "buffer_group": -366227945,
     "api_id": ,
     "api_hash": ''
 }
