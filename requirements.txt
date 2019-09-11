@@ -2,3 +2,4 @@ ffmpy
 ImageHash
 telethon
 tqdm
+pillow
