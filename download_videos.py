@@ -13,6 +13,9 @@ client.start()
 channel_username = 'deergifs'
 channel_entity = client.get_entity(channel_username)
 for message in client.iter_messages(channel_entity):
+    if message.file is None:
+        print(f"No file, skipping message: {message}")
+        continue
     print("Downloading message: {}".format(message))
     file_ext = message.file.mime_type.split("/")[-1]
     path = f"{directory}/{message.id}.{file_ext}"
