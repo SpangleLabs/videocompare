@@ -39,7 +39,7 @@ for message in client.iter_messages(channel_entity):
         # print(f"No file, skipping message: {message}")
         continue
     file_ext = message.file.mime_type.split("/")[-1]
-    path = f"{dir_video}/{message.id.zfill(4)}.{file_ext}"
+    path = f"{dir_video}/{str(message.id).zfill(4)}.{file_ext}"
     if not os.path.exists(path):
         print("Downloading message: {}".format(message))
         client.download_media(message=message, file=path)
@@ -83,7 +83,7 @@ for message in client.iter_messages(buffer_entity):
         # print(f"No file, skipping message: {message}")
         continue
     file_ext = message.file.mime_type.split("/")[-1]
-    path = f"{dir_buffer_video}/{message.id.zfill(4)}.{file_ext}"
+    path = f"{dir_buffer_video}/{str(message.id).zfill(4)}.{file_ext}"
     if not os.path.exists(path):
         print("Downloading message from buffer: {}".format(message))
         client.download_media(message=message, file=path)
