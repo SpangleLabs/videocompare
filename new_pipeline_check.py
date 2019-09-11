@@ -30,6 +30,7 @@ for path in [config['gif_channel'], dir_video, dir_images, dir_buffer, dir_buffe
         os.mkdir(path)
 
 # # # Download missing videos from gif channel
+print("Download missing videos from gif channel")
 client = TelegramClient('duplicate_checker', config['api_id'], config['api_hash'])
 client.start()
 channel_username = config['gif_channel']
@@ -44,7 +45,8 @@ for message in client.iter_messages(channel_entity):
         print("Downloading message: {}".format(message))
         client.download_media(message=message, file=path)
 
-# # # Decompose missing
+# # # Decompose missing videos
+print("Decompose missing videos")
 video_files = glob.glob(f"{dir_video}/*.mp4")
 for video_file in video_files:
     video_number = video_file.split(os.sep)[-1].split(".")[0]
@@ -59,6 +61,7 @@ for video_file in video_files:
         ff.run()
 
 # # # Create huge hash directory
+print("Create huge hash directory")
 for image_directory in glob.glob(f"{dir_images}/*/"):
     post_number = image_directory.strip(os.sep).split(os.sep)[-1]
     # Skip already hashed videos, add to list otherwise
@@ -69,14 +72,16 @@ for image_directory in glob.glob(f"{dir_images}/*/"):
     # Add new hashes
     for image_file in glob.glob(f"{image_directory}/*.png"):
         image = Image.open(image_file)
-        image_hash = imagehash.average_hash(image)
+        image_hash = str(imagehash.average_hash(image))
         store['hashes'][image_hash] = post_number
 
 # # # Save huge hash directory
+print("Save huge hash directory")
 with open(hash_store, "w+") as f:
     json.dump(store, f)
 
 # # # Download videos in buffer chat
+print("Download videos in buffer chat")
 buffer_entity = client.get_entity(config['buffer_group'])
 for message in client.iter_messages(buffer_entity):
     if message.file is None:
@@ -89,6 +94,7 @@ for message in client.iter_messages(buffer_entity):
         client.download_media(message=message, file=path)
 
 # # # Decompose videos from buffer chat
+print("Decompose videos from buffer chat")
 video_files = glob.glob(f"{dir_buffer_video}/*.mp4")
 for video_file in video_files:
     video_number = video_file.split(os.sep)[-1].split(".")[0]
@@ -103,6 +109,7 @@ for video_file in video_files:
         ff.run()
 
 # # # Check for hashes which already exist
+print("Check for hashes which already exist")
 duplicates = []
 
 for image_directory in glob.glob(f"{dir_buffer_images}/*/"):
@@ -111,7 +118,7 @@ for image_directory in glob.glob(f"{dir_buffer_images}/*/"):
     # Build map of image hashes for that directory
     for image_file in glob.glob(f"{image_directory}/*.png"):
         image = Image.open(image_file)
-        image_hash = imagehash.average_hash(image)
+        image_hash = str(imagehash.average_hash(image))
         video_hashes[image_hash] = post_number
     # Merge that into all hashes, checking for duplicates
     duplicate_counts = {}
