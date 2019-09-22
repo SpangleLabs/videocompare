@@ -6,11 +6,14 @@ import ffmpy
 from PIL import Image
 import imagehash
 
+with open("config.json", "r") as f:
+    keys = json.load(f)
+
 config = {
     "gif_channel": "deergifs",
     "buffer_group": -366227945,
-    "api_id": ,
-    "api_hash": ''
+    "api_id": keys['API_ID'],
+    "api_hash": keys['API_HASH']
 }
 hash_store = f"{config['gif_channel']}/hashes.json"
 try:
