@@ -139,10 +139,14 @@ for image_directory in glob.glob(f"{dir_buffer_images}/*/"):
 
 
 def url_from_post_number(post_id):
+    if post_id[:6] == "buffer":
+        post_id = post_id.split("-")[-1]
+        return f"tg://openmessage?chat_id={-config['buffer_group']}&message_id={post_id}"
     return f"https://t.me/{config['gif_channel']}/{post_id}"
 
 
 print("----")
 print(f"Found these duplicates:")
 for duplicate in duplicates:
-    print(f"Post ID {duplicate[0]} in buffer - {url_from_post_number(duplicate[1])}")
+    buffer_id = f"buffer-{duplicate[0]}"
+    print(f"Post ID {url_from_post_number(buffer_id)} in buffer - {url_from_post_number(duplicate[1])}")
