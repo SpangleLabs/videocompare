@@ -86,15 +86,34 @@ with open(hash_store, "w+") as f:
 # # # Download videos in buffer chat
 print("Download videos in buffer chat")
 buffer_entity = client.get_entity(config['buffer_group'])
+buffer_message_ids = []
 for message in client.iter_messages(buffer_entity):
     if message.file is None:
         # print(f"No file, skipping message: {message}")
         continue
+    buffer_message_ids.append(message.id)
     file_ext = message.file.mime_type.split("/")[-1]
     path = f"{dir_buffer_video}/{str(message.id).zfill(4)}.{file_ext}"
     if not os.path.exists(path):
         print("Downloading message from buffer: {}".format(message))
         client.download_media(message=message, file=path)
+
+# # # Delete any videos removed from buffer chat
+buffer_videos = glob.glob(f"{dir_buffer_video}/*")
+for video in buffer_videos:
+    video_number = int(video.split(os.sep)[-1].split(".")[0])
+    if video_number not in buffer_message_ids:
+        print(f"Deleting video: {video}")
+        os.remove(video)
+buffer_images = glob.glob(f"{dir_buffer_images}/*/")
+for images_dir in buffer_images:
+    video_number = int(images_dir.strip(os.sep).split(os.sep)[-1])
+    if video_number not in buffer_message_ids:
+        print(f"Deleting image decomposition: {images_dir}")
+        images = glob.glob(f"{images_dir}/*")
+        for image in images:
+            os.remove(image)
+        os.rmdir(images_dir)
 
 # # # Decompose videos from buffer chat
 print("Decompose videos from buffer chat")
